@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -11,6 +12,10 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.png/,
+        type: 'asset/resource',
+      },
     ],
   },
   devtool: 'inline-source-map',
@@ -19,15 +24,16 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-     title: 'Development',
+      template: 'src/index.html',
     }),
+    new CopyWebpackPlugin({patterns: [{ from: './src/assets', to: 'assets' }]}),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     filename: '[name].bundle.js',
-     path: path.resolve(__dirname, 'dist'),
-     clean: true,
-   },
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
 };
