@@ -16,7 +16,15 @@ const createSpriteRendering = (
   const [x, y] = component.positionable.pos;
   const [w, h] = component.positionable.size;
 
+  if (component.hasShadow) {
+    context.shadowColor = '#000';
+    context.shadowBlur = 0;
+    context.shadowOffsetX = 4;
+    context.shadowOffsetY = 4;
+  }
+
   context.drawImage(sprite, x, y, w, h);
+  context.restore();
 };
 
 export default (

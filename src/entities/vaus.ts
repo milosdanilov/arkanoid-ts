@@ -28,7 +28,8 @@ const createVausBinder = (spriteRenderingSystem: System<SpriteRenderable>) => {
 
   const spriteRenderable = createSpriteRenderable(
     'vaus-normal-0',
-    positionable
+    positionable,
+    true
   );
 
   spriteRenderingSystem.register(spriteRenderable);
