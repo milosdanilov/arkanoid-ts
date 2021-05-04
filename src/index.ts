@@ -1,6 +1,7 @@
 import createSpriteSheet from './sprite/sprite-sheet';
 import createSpriteRenderSystem from './rendering/sprite-rendering-system';
 import bindField from './entities/field';
+import bindVaus from './entities/vaus';
 
 const canvas = document.body.querySelector<HTMLCanvasElement>('#game');
 
@@ -40,12 +41,21 @@ context.imageSmoothingEnabled = false;
     // { name: 'doh-field', dimensions: [] },
   ]);
 
-  const spriteRenderSystem = createSpriteRenderSystem(
-    context,
-    fieldSpriteSheet
-  );
+  const vausSprites = await loadSpriteSheet('./assets/vaus.png');
+
+  const vausSpriteSheet = await createSpriteSheet(vausSprites, [
+    { name: 'vaus-normal-0', dimensions: [32, 8, 32, 8] },
+  ]);
+
+  const spriteSheet = new Map([
+    ...fieldSpriteSheet.entries(),
+    ...vausSpriteSheet.entries(),
+  ]);
+
+  const spriteRenderSystem = createSpriteRenderSystem(context, spriteSheet);
 
   bindField(spriteRenderSystem);
+  bindVaus(spriteRenderSystem);
 
   const loop = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
