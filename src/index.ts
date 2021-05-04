@@ -1,7 +1,8 @@
 import createSpriteSheet from './sprite/sprite-sheet';
 import createSpriteRenderSystem from './rendering/sprite-rendering-system';
-import bindField from './entities/field';
-import bindVaus from './entities/vaus';
+import spriteAnimationSystem from './rendering/sprite-animation-system';
+import bindField, { fieldSpriteSheetDefinitions } from './entities/field';
+import bindVaus, { vausSpriteSheetDefinitions } from './entities/vaus';
 
 const canvas = document.body.querySelector<HTMLCanvasElement>('#game');
 
@@ -27,25 +28,13 @@ const loadSpriteSheet = (srcPath: string) => {
 context.imageSmoothingEnabled = false;
 
 (async () => {
-  const fieldSprites = await loadSpriteSheet('./assets/fields.png');
+  const fieldSpriteSheet = await loadSpriteSheet(
+    './assets/fields.png'
+  ).then((sprite) => createSpriteSheet(sprite, fieldSpriteSheetDefinitions));
 
-  const fieldSpriteSheet = await createSpriteSheet(fieldSprites, [
-    { name: 'blue-honeycomb-field-0', dimensions: [0, 0, 224, 240] },
-    // { name: 'blue-honeycomb-field-1', dimensions: [] },
-    // { name: 'green-field-0', dimensions: [] },
-    // { name: 'green-field-1', dimensions: [] },
-    // { name: 'blue-robotic-field-0', dimensions: [] },
-    // { name: 'blue-robotic-field-1', dimensions: [] },
-    // { name: 'red-robotic-field-0', dimensions: [] },
-    // { name: 'red-robotic-field-1', dimensions: [] },
-    // { name: 'doh-field', dimensions: [] },
-  ]);
-
-  const vausSprites = await loadSpriteSheet('./assets/vaus.png');
-
-  const vausSpriteSheet = await createSpriteSheet(vausSprites, [
-    { name: 'vaus-normal-0', dimensions: [32, 8, 32, 8] },
-  ]);
+  const vausSpriteSheet = await loadSpriteSheet(
+    './assets/vaus.png'
+  ).then((sprite) => createSpriteSheet(sprite, vausSpriteSheetDefinitions));
 
   const spriteSheet = new Map([
     ...fieldSpriteSheet.entries(),
@@ -55,12 +44,13 @@ context.imageSmoothingEnabled = false;
   const spriteRenderSystem = createSpriteRenderSystem(context, spriteSheet);
 
   bindField(spriteRenderSystem);
-  bindVaus(spriteRenderSystem);
+  bindVaus(spriteRenderSystem, spriteAnimationSystem);
 
-  const loop = () => {
+  const loop = (time: number) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    spriteRenderSystem.update();
+    spriteRenderSystem.update(time);
+    spriteAnimationSystem.update(time);
 
     requestAnimationFrame(loop);
   };

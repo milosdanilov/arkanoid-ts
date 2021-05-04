@@ -1,8 +1,8 @@
-type Next<T> = (component: T) => void;
+type Next<T> = (component: T, time: number) => void;
 
 export interface System<T> {
   register(component: T): void;
-  update(): void;
+  update(time: number): void;
 }
 
 const createSystem = <T>(next: Next<T>): System<T> => {
@@ -13,9 +13,9 @@ const createSystem = <T>(next: Next<T>): System<T> => {
       components.push(component);
     },
 
-    update() {
+    update(time: number) {
       for (let component of components) {
-        next(component);
+        next(component, time);
       }
     },
   };
