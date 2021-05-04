@@ -3,10 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <title>Arkanoid</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        width: 100%;
+        background-color: black;
+      }
+      .main {
+        display: flex;
+        height: 100%;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+      }
+      .game {
+        background: black;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        width: calc(224px * 3);
+        height: calc(240px * 3);
+      }
+    </style>
   </head>
   <body>
     <main class="main">
-      <canvas id="game" class="game" width="226" height="248"></canvas>
+      <canvas id="game" class="game" width="224" height="240"></canvas>
     </main>
   </body>
 </html>
