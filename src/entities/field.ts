@@ -11,6 +11,8 @@ import {
 export const SPRITE_FIELD_WIDTH = 224;
 export const SPRITE_FIELD_HEIGHT = 240;
 
+export const SPRITE_FIELD_OFFSET_BOUND = 8;
+
 export const fieldSpriteSheetDefinitions: SpriteDefinition[] = [
   {
     name: 'blue-honeycomb-field-0',

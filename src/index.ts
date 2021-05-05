@@ -3,6 +3,8 @@ import createSpriteRenderSystem from './rendering/sprite-rendering-system';
 import spriteAnimationSystem from './rendering/sprite-animation-system';
 import bindField, { fieldSpriteSheetDefinitions } from './entities/field';
 import bindVaus, { vausSpriteSheetDefinitions } from './entities/vaus';
+import { blockSpriteSheetDefinitions } from './entities/blocks/block';
+import bindBlocks from './entities/blocks/blocks';
 
 const canvas = document.body.querySelector<HTMLCanvasElement>('#game');
 
@@ -36,15 +38,21 @@ context.imageSmoothingEnabled = false;
     './assets/vaus.png'
   ).then((sprite) => createSpriteSheet(sprite, vausSpriteSheetDefinitions));
 
+  const blockSpriteSheet = await loadSpriteSheet(
+    './assets/blocks.png'
+  ).then((sprite) => createSpriteSheet(sprite, blockSpriteSheetDefinitions));
+
   const spriteSheet = new Map([
     ...fieldSpriteSheet.entries(),
     ...vausSpriteSheet.entries(),
+    ...blockSpriteSheet.entries(),
   ]);
 
   const spriteRenderSystem = createSpriteRenderSystem(context, spriteSheet);
 
   bindField(spriteRenderSystem);
   bindVaus(spriteRenderSystem, spriteAnimationSystem);
+  bindBlocks(spriteRenderSystem);
 
   const loop = (time: number) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
