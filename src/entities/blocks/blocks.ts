@@ -12,9 +12,9 @@ const BLOCKS: BLOCK[][] = [
   ['HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0', 'HY-0'],
   ['R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   , 'R'   ],
   ['B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   , 'B'   ],
-  ['O',  'O',  'O',  'O',  'O',  'O',  'O',  'O',  'O',  'O',  'O', 'O', 'O' ],
-  ['P',  'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P', 'P', 'P' ],
-  ['G',  'G',  'G',  'G',  'G',  'G',  'G',  'G',  'G',  'G',  'G', 'G', 'G' ]
+  ['O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   , 'O'   ],
+  ['P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   , 'P'   ],
+  ['G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   , 'G'   ]
 ];
 
 const OFFSET_WIDTH = SPRITE_FIELD_OFFSET_BOUND;
