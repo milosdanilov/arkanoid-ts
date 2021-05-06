@@ -1,4 +1,4 @@
-import { createPositionable } from '../positionable';
+import { createPositionable, Positionable, Point2D } from '../positionable';
 import { System } from '../system/system';
 
 import { SpriteDefinition } from '../sprite/sprite-sheet';
@@ -12,7 +12,14 @@ import {
   SpriteAnimatable,
 } from '../sprite/sprite-animatable';
 
-import { SPRITE_FIELD_HEIGHT, SPRITE_FIELD_WIDTH } from './field';
+import {
+  isOutOfBounds,
+  SPRITE_FIELD_HEIGHT,
+  SPRITE_FIELD_WIDTH,
+} from './field';
+import { addVectors } from '../vectors';
+import createKeyboardMoveable, { KeyboardMoveable } from '../input/keyboard-moveable';
+import createMoveable from '../moveable';
 
 export const VAUS_NORMAL_SPRITE = {
   width: 32,
@@ -40,7 +47,8 @@ export const vausSpriteSheetDefinitions: SpriteDefinition[] = Array.from({
 
 const createVausBinder = (
   spriteRenderingSystem: System<SpriteRenderable>,
-  spriteAnimatableSystem: System<SpriteAnimatable>
+  spriteAnimatableSystem: System<SpriteAnimatable>,
+  keyboardMovementSystem: System<KeyboardMoveable>
 ) => {
   const positionable = createPositionable(
     VAUS_DEFAULT_POS.x,
@@ -62,8 +70,23 @@ const createVausBinder = (
     VAUS_NORMAL_SPRITE.prefix
   );
 
+  const moveable = createMoveable(0, 0, 2, 0);
+  const keyboardMoveable = createKeyboardMoveable(positionable, moveable, canMoveTo);
+
   spriteRenderingSystem.register(spriteRenderable);
   spriteAnimatableSystem.register(spriteAnimatable);
+  keyboardMovementSystem.register(keyboardMoveable);
+};
+
+export const canMoveTo = (
+  currentPositionable: Positionable,
+  direction: Point2D
+) => {
+  const { pos, size } = currentPositionable;
+
+  const target = addVectors(pos, direction);
+
+  return !isOutOfBounds(target, size);
 };
 
 export default createVausBinder;

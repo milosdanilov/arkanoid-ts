@@ -5,6 +5,8 @@ import bindField, { fieldSpriteSheetDefinitions } from './entities/field';
 import bindVaus, { vausSpriteSheetDefinitions } from './entities/vaus';
 import { blockSpriteSheetDefinitions } from './entities/blocks/block';
 import bindBlocks from './entities/blocks/blocks';
+import createKeyboard from './input/keyboard';
+import createKeyboardMovementSystem from './input/keyboard-movement-system';
 
 const canvas = document.body.querySelector<HTMLCanvasElement>('#game');
 
@@ -50,8 +52,11 @@ context.imageSmoothingEnabled = false;
 
   const spriteRenderSystem = createSpriteRenderSystem(context, spriteSheet);
 
+  const keyboard = createKeyboard(window, ['ArrowLeft', 'ArrowRight']);
+  const keyboardMovementSystem = createKeyboardMovementSystem(keyboard);
+
   bindField(spriteRenderSystem);
-  bindVaus(spriteRenderSystem, spriteAnimationSystem);
+  bindVaus(spriteRenderSystem, spriteAnimationSystem, keyboardMovementSystem);
   bindBlocks(spriteRenderSystem);
 
   const loop = (time: number) => {
@@ -59,6 +64,7 @@ context.imageSmoothingEnabled = false;
 
     spriteRenderSystem.update(time);
     spriteAnimationSystem.update(time);
+    keyboardMovementSystem.update(time);
 
     requestAnimationFrame(loop);
   };

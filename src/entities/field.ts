@@ -1,4 +1,4 @@
-import { createPositionable } from '../positionable';
+import { createPositionable, Point2D } from '../positionable';
 import { System } from '../system/system';
 
 import { SpriteDefinition } from '../sprite/sprite-sheet';
@@ -12,6 +12,7 @@ export const SPRITE_FIELD_WIDTH = 224;
 export const SPRITE_FIELD_HEIGHT = 240;
 
 export const SPRITE_FIELD_OFFSET_BOUND = 8;
+export const SPRITE_FIELD_RIGHT_BOUND = 216;
 
 export const fieldSpriteSheetDefinitions: SpriteDefinition[] = [
   {
@@ -42,6 +43,22 @@ const createFieldBinder = (spriteRenderingSystem: System<SpriteRenderable>) => {
   );
 
   spriteRenderingSystem.register(spriteRenderable);
+};
+
+export const isOutOfBounds = (target: Point2D, size: Point2D) => {
+  const [xPoint, _yPoint] = target;
+  const [width, _height] = size;
+
+  const b = (
+    xPoint < SPRITE_FIELD_OFFSET_BOUND ||
+    xPoint > SPRITE_FIELD_RIGHT_BOUND ||
+    xPoint + width > SPRITE_FIELD_RIGHT_BOUND
+  );
+
+  // console.log('xPoint: ', xPoint);
+  // console.log('isOutOfBounds: ', b);
+
+  return b;
 };
 
 export default createFieldBinder;
