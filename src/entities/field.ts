@@ -13,6 +13,7 @@ export const SPRITE_FIELD_HEIGHT = 240;
 
 export const SPRITE_FIELD_OFFSET_BOUND = 8;
 export const SPRITE_FIELD_RIGHT_BOUND = 216;
+export const SPRITE_FIELD_UPPER_BOUND = 8;
 
 export const fieldSpriteSheetDefinitions: SpriteDefinition[] = [
   {
@@ -43,22 +44,30 @@ const createFieldBinder = (spriteRenderingSystem: System<SpriteRenderable>) => {
   );
 
   spriteRenderingSystem.register(spriteRenderable);
+
+  return [positionable];
 };
 
 export const isOutOfBounds = (target: Point2D, size: Point2D) => {
+  return isOutOfBoundsX(target, size) && isOutOfBoundsY(target, size);
+};
+
+export const isOutOfBoundsX = (target: Point2D, size: Point2D) => {
   const [xPoint, _yPoint] = target;
   const [width, _height] = size;
 
-  const b = (
+  return (
     xPoint < SPRITE_FIELD_OFFSET_BOUND ||
     xPoint > SPRITE_FIELD_RIGHT_BOUND ||
     xPoint + width > SPRITE_FIELD_RIGHT_BOUND
   );
+};
 
-  // console.log('xPoint: ', xPoint);
-  // console.log('isOutOfBounds: ', b);
+export const isOutOfBoundsY = (target: Point2D, size: Point2D) => {
+  const [_xPoint, yPoint] = target;
+  const [_width, _height] = size;
 
-  return b;
+  return yPoint < SPRITE_FIELD_UPPER_BOUND;
 };
 
 export default createFieldBinder;

@@ -76,6 +76,8 @@ const createVausBinder = (
   spriteRenderingSystem.register(spriteRenderable);
   spriteAnimatableSystem.register(spriteAnimatable);
   keyboardMovementSystem.register(keyboardMoveable);
+
+  return [positionable];
 };
 
 export const canMoveTo = (

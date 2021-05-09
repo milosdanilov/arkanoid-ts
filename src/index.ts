@@ -7,6 +7,9 @@ import { blockSpriteSheetDefinitions } from './entities/blocks/block';
 import bindBlocks from './entities/blocks/blocks';
 import createKeyboard from './input/keyboard';
 import createKeyboardMovementSystem from './input/keyboard-movement-system';
+import bindBall, { ballSpriteSheetDefinition } from './entities/ball';
+import autoMovementSystem from './movement/auto-movement-system';
+import collisionSystem from './collision/collision-system';
 
 const canvas = document.body.querySelector<HTMLCanvasElement>('#game');
 
@@ -38,7 +41,12 @@ context.imageSmoothingEnabled = false;
 
   const vausSpriteSheet = await loadSpriteSheet(
     './assets/vaus.png'
-  ).then((sprite) => createSpriteSheet(sprite, vausSpriteSheetDefinitions));
+  ).then((sprite) =>
+    createSpriteSheet(sprite, [
+      ...vausSpriteSheetDefinitions,
+      ballSpriteSheetDefinition,
+    ])
+  );
 
   const blockSpriteSheet = await loadSpriteSheet(
     './assets/blocks.png'
@@ -55,9 +63,25 @@ context.imageSmoothingEnabled = false;
   const keyboard = createKeyboard(window, ['ArrowLeft', 'ArrowRight']);
   const keyboardMovementSystem = createKeyboardMovementSystem(keyboard);
 
-  bindField(spriteRenderSystem);
-  bindVaus(spriteRenderSystem, spriteAnimationSystem, keyboardMovementSystem);
+  const [fieldPositionable] = bindField(spriteRenderSystem);
   bindBlocks(spriteRenderSystem);
+
+  const [vausPositionable] = bindVaus(
+    spriteRenderSystem,
+    spriteAnimationSystem,
+    keyboardMovementSystem
+  );
+
+  bindBall(spriteRenderSystem, autoMovementSystem, collisionSystem, [
+    {
+      name: 'vaus',
+      positionable: vausPositionable,
+    },
+    {
+      name: 'field',
+      positionable: fieldPositionable,
+    },
+  ]);
 
   const loop = (time: number) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,6 +89,8 @@ context.imageSmoothingEnabled = false;
     spriteRenderSystem.update(time);
     spriteAnimationSystem.update(time);
     keyboardMovementSystem.update(time);
+    autoMovementSystem.update(time);
+    collisionSystem.update(time);
 
     requestAnimationFrame(loop);
   };
