@@ -63,8 +63,8 @@ context.imageSmoothingEnabled = false;
   const keyboard = createKeyboard(window, ['ArrowLeft', 'ArrowRight']);
   const keyboardMovementSystem = createKeyboardMovementSystem(keyboard);
 
-  const [fieldPositionable] = bindField(spriteRenderSystem);
-  bindBlocks(spriteRenderSystem);
+  bindField(spriteRenderSystem);
+  const blocksPositionables = bindBlocks(spriteRenderSystem);
 
   const [vausPositionable] = bindVaus(
     spriteRenderSystem,
@@ -79,7 +79,10 @@ context.imageSmoothingEnabled = false;
     },
     {
       name: 'field',
-      positionable: fieldPositionable,
+    },
+    {
+      name: 'blocks',
+      positionable: blocksPositionables.reduce((acc, curr) => acc.concat(curr), [])
     },
   ]);
 

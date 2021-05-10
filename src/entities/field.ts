@@ -44,8 +44,6 @@ const createFieldBinder = (spriteRenderingSystem: System<SpriteRenderable>) => {
   );
 
   spriteRenderingSystem.register(spriteRenderable);
-
-  return [positionable];
 };
 
 export const isOutOfBounds = (target: Point2D, size: Point2D) => {

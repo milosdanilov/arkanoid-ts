@@ -23,8 +23,8 @@ const OFFSET_HEIGHT = SPRITE_FIELD_OFFSET_BOUND + 4 * SPRITE_BLOCK.height;
 const createBlockBinder = (blocks: BLOCK[][]) => (
   spriteRenderingSystem: System<SpriteRenderable>
 ) => {
-  blocks.forEach((rowBlocks, rowIdx) => {
-    rowBlocks.forEach((block, columnIdx) => {
+  return blocks.map((rowBlocks, rowIdx) => {
+    return rowBlocks.map((block, columnIdx) => {
       const positionable = createPositionable(
         columnIdx * SPRITE_BLOCK.width + OFFSET_WIDTH,
         rowIdx * SPRITE_BLOCK.height + OFFSET_HEIGHT,
@@ -35,6 +35,8 @@ const createBlockBinder = (blocks: BLOCK[][]) => (
       const renderable = createSpriteRenderable(block, positionable);
 
       spriteRenderingSystem.register(renderable);
+
+      return positionable;
     });
   });
 };

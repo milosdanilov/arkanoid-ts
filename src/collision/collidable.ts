@@ -1,12 +1,24 @@
 import { Moveable } from '../moveable';
 import { Positionable } from '../positionable';
 
-type CanCollideWithName = 'vaus' | 'field';
-
-export interface CanCollideWith {
-  name: CanCollideWithName;
+interface CanCollideWithVaus {
+  name: 'vaus';
   positionable: Positionable;
 }
+
+interface CanCollideWithField {
+  name: 'field';
+}
+
+interface CanCollideWithBlocks {
+  name: 'blocks';
+  positionable: Positionable[];
+}
+
+export type CanCollideWith =
+  | CanCollideWithVaus
+  | CanCollideWithField
+  | CanCollideWithBlocks;
 
 export type CheckCollision = (
   positionable: Positionable,

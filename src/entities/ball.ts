@@ -13,7 +13,7 @@ import createCollidable, {
   Collidable,
 } from '../collision/collidable';
 
-import { createPositionable, Positionable } from '../positionable';
+import { createPositionable, Point2D, Positionable } from '../positionable';
 import createMoveable, { Moveable } from '../moveable';
 import { addVectors } from '../vectors';
 
@@ -40,6 +40,14 @@ export const ballSpriteSheetDefinition: SpriteDefinition = {
   dimensions: [0, 40, BALL_SPRITE.width, BALL_SPRITE.height],
 };
 
+const changeXDirection = (direction: Point2D) => {
+  direction[0] = -direction[0];
+};
+
+const changeYDirection = (direction: Point2D) => {
+  direction[1] = -direction[1];
+};
+
 const crateCheckCollision = (canCollideWith: CanCollideWith[]) => (
   positionable: Positionable,
   moveable: Moveable
@@ -52,21 +60,43 @@ const crateCheckCollision = (canCollideWith: CanCollideWith[]) => (
     const [vausWidth, _vausHeight] = vausPositionable.size;
 
     if (x + width > vausX && x < vausX + vausWidth && y + height === vausY) {
-      moveable.direction[1] = -moveable.direction[1];
+      changeYDirection(moveable.direction);
     }
   };
 
   const checkCollisionWithField = () => {
-
     const target = addVectors(positionable.pos, moveable.direction);
 
     if (fieldOutOfBoundsX(target, positionable.size)) {
-      moveable.direction[0] = -moveable.direction[0];
+      changeXDirection(moveable.direction);
     }
 
     if (fieldOutOfBoundsY(target, positionable.size)) {
-      moveable.direction[1] = -moveable.direction[1];
+      changeYDirection(moveable.direction);
     }
+  };
+
+  const checkCollisionWithBlocks = (blockPositionables: Positionable[]) => {
+    blockPositionables.some((block) => {
+      const target = addVectors(positionable.pos, moveable.direction);
+
+      const [targetX, targetY] = target;
+
+      const [blockX, blockY] = block.pos;
+      const [blockW, blockH] = block.size;
+
+      if (
+        targetX < blockX + blockW &&
+        targetX + width > blockX &&
+        targetY < blockY + blockH &&
+        targetY + height > blockY
+      ) {
+        changeYDirection(moveable.direction);
+        return true;
+      }
+
+      return false;
+    });
   };
 
   canCollideWith.forEach((collisionWith) => {
@@ -76,6 +106,10 @@ const crateCheckCollision = (canCollideWith: CanCollideWith[]) => (
 
     if (collisionWith.name === 'field') {
       checkCollisionWithField();
+    }
+
+    if (collisionWith.name === 'blocks') {
+      checkCollisionWithBlocks(collisionWith.positionable);
     }
   });
 };
